@@ -20,7 +20,7 @@ def next_biggest_number(number: int) -> int:
         int: The next largest integer or -1 if a larger value can not be created 
     """
 
-    def _find_bigger(n, i, x, next_largest_val =[]) -> list: 
+    def _find_bigger(n: list, i: int, x: int, next_largest_val: list = []) -> list: 
 
         if i <= 0:
             return next_largest_val
@@ -29,10 +29,8 @@ def next_biggest_number(number: int) -> int:
         elif n[i] > n[x]: 
             n_ = n.copy()
             n_[i], n_[x] = n_[x], n_[i]
-            shrink_n = n_[x+1:len(n_)]
-            shrink_n.sort()
-            n_[x+1:len(n_)] = shrink_n
-            int_n = int("".join(n_))
+            sorted_n = n_[0:x+1] + sorted(n_[x+1:len(n_)])
+            int_n = int("".join(sorted_n))
             try: 
                 if int_n < min(next_largest_val):
                     next_largest_val.clear()
@@ -51,12 +49,11 @@ def next_biggest_number(number: int) -> int:
     # iterate through each next index
     x_ = i_ -1 
 
-    new_number = _find_bigger(n_list, i_, x_, next_largest_val=[])
-    if len(new_number) == 0:
+    next_value = _find_bigger(n_list, i_, x_, next_largest_val=[])
+    if len(next_value) == 0:
         return -1 
     else: 
-        min_new_number = min(new_number)
-        return min_new_number
+        return min(next_value)
 
 if __name__ == "__main__":
     next_number = next_biggest_number(sys.argv[1])
