@@ -20,7 +20,7 @@ def next_biggest_number(number: int) -> int:
         int: The next largest integer or -1 if a larger value can not be created 
     """
 
-    def _find_bigger(n: list, i: int, x: int, next_largest_val: list = []) -> list: 
+    def _find_bigger(n: list, i: int, x: int, next_largest_val: int = None) -> int: 
 
         if i <= 0:
             return next_largest_val
@@ -31,29 +31,25 @@ def next_biggest_number(number: int) -> int:
             n_[i], n_[x] = n_[x], n_[i]
             sorted_n = n_[0:x+1] + sorted(n_[x+1:len(n_)])
             int_n = int("".join(sorted_n))
-            try: 
-                if int_n < min(next_largest_val):
-                    next_largest_val.clear()
-                    next_largest_val.append(int_n)
-            except ValueError:
-                next_largest_val.append(int_n) 
+            if next_largest_val:
+                if int_n < next_largest_val:
+                    next_largest_val = int_n 
+            else:
+                next_largest_val = int_n
             return _find_bigger(n, i, x - 1, next_largest_val) 
         else:
             return _find_bigger(n, i, x - 1, next_largest_val)
 
-
-    # make object mutable  
+    # make object mutable and start iteration from nth digit (i)  
     n_list = list(str(number))
-    # starting end index: i 
     i_ = len(n_list) -1 
-    # iterate through each next index
     x_ = i_ -1 
 
-    next_value = _find_bigger(n_list, i_, x_, next_largest_val=[])
-    if len(next_value) == 0:
+    next_value = _find_bigger(n_list, i_, x_, next_largest_val=None)
+    if next_value:
+        return next_value
+    else:
         return -1 
-    else: 
-        return min(next_value)
 
 if __name__ == "__main__":
     next_number = next_biggest_number(sys.argv[1])
